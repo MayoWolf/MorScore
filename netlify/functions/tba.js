@@ -103,7 +103,10 @@ function toSortableDate(event) {
 }
 
 function isCaliforniaEvent(event) {
-  return event?.state_prov === "California";
+  const stateProv = String(event?.state_prov || "").trim().toLowerCase();
+  const districtAbbreviation = String(event?.district?.abbreviation || "").trim().toLowerCase();
+
+  return stateProv === "ca" || stateProv === "california" || districtAbbreviation === "ca";
 }
 
 function isInSeasonEvent(event) {
