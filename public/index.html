@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MorScore</title>
+    <meta
+      name="description"
+      content="Browse California district FRC events, district rankings, and each team's previous California result."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">California FRC Snapshot</p>
+        <h1>MorScore</h1>
+        <p class="hero-copy">
+          Pick a California district event and compare who is attending, where each team sits
+          in district rankings, and how they finished at their previous California competition.
+        </p>
+      </header>
+
+      <main class="panel">
+        <section class="controls" aria-label="Event controls">
+          <label class="field">
+            <span>Season</span>
+            <select id="year-select"></select>
+          </label>
+
+          <label class="field field-wide">
+            <span>CA District Event</span>
+            <select id="event-select" disabled>
+              <option>Loading events...</option>
+            </select>
+          </label>
+
+          <button id="refresh-button" class="refresh-button" type="button">Refresh</button>
+        </section>
+
+        <section id="status-banner" class="status-banner" aria-live="polite"></section>
+
+        <section id="event-summary" class="summary-grid" aria-label="Event summary"></section>
+
+        <section class="table-panel">
+          <div class="table-toolbar">
+            <div>
+              <h2>Attending Teams</h2>
+              <p id="table-subtitle">Choose an event to load team performance details.</p>
+            </div>
+
+            <label class="search-field">
+              <span>Filter teams</span>
+              <input
+                id="team-filter"
+                type="search"
+                placeholder="Search team number or name"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Team</th>
+                  <th>CA Rank</th>
+                  <th>Previous CA Event</th>
+                  <th>Previous Finish</th>
+                </tr>
+              </thead>
+              <tbody id="teams-table-body">
+                <tr>
+                  <td colspan="4" class="empty-state">Event data will appear here.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        Powered by <a href="https://www.thebluealliance.com/" target="_blank" rel="noreferrer">The Blue Alliance</a>
+      </footer>
+    </div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
