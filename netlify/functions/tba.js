@@ -97,6 +97,19 @@ function sortByDate(events) {
   });
 }
 
+function toSortableDate(event) {
+  return event?.end_date || event?.start_date || "";
+}
+
+function isCaliforniaEvent(event) {
+  return event?.state_prov === "California";
+}
+
+function isInSeasonEvent(event) {
+  const eventType = String(event?.event_type_string || "").toLowerCase();
+  return !eventType.includes("offseason") && !eventType.includes("preseason");
+}
+
 function parseRankingsPayload(payload) {
   if (Array.isArray(payload)) {
     return payload;
@@ -151,7 +164,7 @@ function pickPreviousCaliforniaEvent(teamEvents, currentEvent) {
         return false;
       }
 
-      if (event.state_prov !== "California") {
+      if (!isCaliforniaEvent(event) || !isInSeasonEvent(event)) {
         return false;
       }
 
@@ -159,8 +172,7 @@ function pickPreviousCaliforniaEvent(teamEvents, currentEvent) {
         return false;
       }
 
-      const eventEnd = event.end_date || event.start_date;
-      return Boolean(eventEnd) && eventEnd < currentStart;
+      return Boolean(toSortableDate(event)) && toSortableDate(event) < currentStart;
     });
 
   return previousEvents[previousEvents.length - 1] || null;
@@ -211,7 +223,7 @@ async function buildEventSummary(eventKey) {
 
   const districtRankMap = buildDistrictRankMap(parseRankingsPayload(districtRankings));
   const teamEvents = await mapWithConcurrency(teams, 8, async (team) => {
-    const events = await tbaRequest(`/team/${team.key}/events/${event.year}/simple`);
+    const events = await tbaRequest(`/team/${team.key}/events/simple`);
     return {
       teamKey: team.key,
       previousEvent: pickPreviousCaliforniaEvent(events, event),
