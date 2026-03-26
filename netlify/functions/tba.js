@@ -1,5 +1,6 @@
 const TBA_API_BASE = "https://www.thebluealliance.com/api/v3";
 const DISTRICT_SUFFIX = "ca";
+const OFFICIAL_EVENT_TYPE_MAX = 6;
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
 };
@@ -106,8 +107,8 @@ function isCaliforniaEvent(event) {
 }
 
 function isInSeasonEvent(event) {
-  const eventType = String(event?.event_type_string || "").toLowerCase();
-  return !eventType.includes("offseason") && !eventType.includes("preseason");
+  const eventType = Number(event?.event_type);
+  return Number.isFinite(eventType) && eventType >= 0 && eventType <= OFFICIAL_EVENT_TYPE_MAX;
 }
 
 function parseRankingsPayload(payload) {
